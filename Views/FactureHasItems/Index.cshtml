@@ -1,0 +1,71 @@
+﻿@model PaginatedList<MyLittleBusiness.Models.FactureHasItem>
+
+@{
+    ViewData["Title"] = "Lista towarów w fakturze";
+    int factureId = (int)ViewData["factureId"];
+    int clientId = (int)ViewData["clientId"];
+}
+
+<h1>Lista towarów w fakturze</h1>
+
+<p>
+    <a asp-action="Create" asp-route-id=@factureId>Dodaj towar do faktury</a>
+    <a asp-action="Back" asp-route-id=@clientId>Powrót</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-id=@factureId asp-route-sortOrder="@ViewData["AmountSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Ilość</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-id=@factureId asp-route-sortOrder="@ViewData["PriceSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Wartość brutto</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-id=@factureId asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Nazwa towaru</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceGross)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.Name)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.FactureHasItemId">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.FactureHasItemId">Usuń z faktury</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-id=@factureId
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    @string.Format("<-")
+</a>
+<a asp-action="Index"
+   asp-route-id=@factureId
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    @string.Format("->")
+</a>

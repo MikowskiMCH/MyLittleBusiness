@@ -1,0 +1,49 @@
+﻿@model MyLittleBusiness.Models.Item
+@Html.ValidationMessageFor(f => f.VatValue, "Uwaga! Przy wprowadzaniu *Podatek VAT* należy wprowadzić wartość setną (1 = 100%, 0.23 = 23%)", new { @class = "text-danger" })
+
+@{
+    ViewData["Title"] = "Dodaj towar";
+}
+<globalization uiCulture="en" culture="en-US" />
+<h1>Dodaj towar</h1>
+
+<h4>Nowy towar</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceNetto" class="control-label"></label>
+                <input asp-for="PriceNetto" class="form-control" />
+                <span asp-validation-for="PriceNetto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VatValue" class="control-label"></label>
+                <input asp-for="VatValue" class="form-control" />
+                <span asp-validation-for="VatValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductCountAs" class="control-label"></label>
+                <select asp-for="ProductCountAs" class="form-control" asp-items="Html.GetEnumSelectList<ProductCountAs>()"></select>
+                <span asp-validation-for="ProductCountAs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Powrót do listy towarów</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

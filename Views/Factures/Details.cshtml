@@ -1,0 +1,51 @@
+﻿@model MyLittleBusiness.Models.Facture
+
+@{
+    ViewData["Title"] = "Szczegóły faktury";
+}
+
+<h1>Szczegóły</h1>
+
+<div>
+    <h4>Faktura @Model.FactureId</h4>
+    <hr />
+    <h3>Całkościowa wartośc netto towaru: @ViewData["sumNetto"] zł</h3>
+    <h3>całościowa wartość brutto towaru: @ViewData["sumBrutto"] zł</h3>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Client.ClientName)
+        </dd>
+    </dl>
+    <hr />
+    <h3>Zawiera towary:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa towaru</th>
+                <th>Ilość</th>
+                <th>Wartość brutto</th>
+            </tr>
+        </thead>
+        @foreach (var item in ViewBag.items)
+        {
+            <tr>
+                <th>@item.Name</th>
+                <th>@item.Amount</th>
+                <th>@item.PriceGross</th>
+            </tr>
+        }
+    </table>
+    
+</div>
+<div>
+    <a asp-action="Index" asp-route-id="@Model?.ClientId">Powrót do listy faktur</a>
+</div>

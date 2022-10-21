@@ -1,0 +1,160 @@
+﻿@model MyLittleBusiness.Models.Facture
+@{
+    var userId = UserManager.GetUserId(User);
+    var user = UserManager.FindByIdAsync(userId).Result;
+    Layout = null;
+    var netto = Model.FactureHasItems.Sum(f => f.PriceNetto);
+    var gross = Model.FactureHasItems.Sum(f => f.PriceGross);
+    int bigVal = (int)gross;
+    int lowVal = (int)(100 * gross) % 100;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MyLittleBusines.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <title>PrintFacture</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h1 class="text-center">Faktura nr.: @Model.FactureId</h1>
+            <h5 class="text-center">Kopia / Oryginał</h5>
+            <h5 class="text-center">Data wystawienia faktury i wykonania usługi: @Model.Date.Day-@Model.Date.Month-@Model.Date.Year</h5>
+            <h5 class="text-center">Termin płatności: @(Model.Date.AddDays(7).Day)-@(Model.Date.AddDays(7).Month)-@(Model.Date.AddDays(7).Year)</h5>
+            <h5 class="text-center">Foram płatności: przelew / gotówka</h5>
+            <br />
+            <hr />
+            <div class="col-xs-6">
+                <p>Sprzedawca: @user.FirstName @if(@user.SecondName!=null){@user.SecondName} @user.Surname</p>
+                <p>Nazwa firmy: @user.ConcernName</p>
+                <p>Adres: @user.Email</p>
+                <p>NIP: @user.Nip</p>
+            </div>
+            <div class="col-xs-6">
+                <p>Nabywca: @Model.Client.ClientName</p>
+                <p>Adres: @Model.Client.Address</p>
+                <p>NIP: @Model.Client.NIP</p>
+            </div>
+            <br />
+        </div>
+        <div class="row">
+            <table class="table text-center">
+                <thread>
+                    <tr>
+                        <th>
+                            Nazwa Towaru
+                        </th>
+                        <th>
+                            Jm.
+                        </th>
+                        <th>
+                            Ilość
+                        </th>
+                        <th>
+                            Cena netto
+                        </th>
+                        <th>
+                            Wartośc netto
+                        </th>
+                        <th>
+                            Stawka VAT
+                        </th>
+                        <th>
+                            Kwota VAT
+                        </th>
+                        <th>
+                            Wartość brutto
+                        </th>
+                    </tr>
+                </thread>
+                <tbody>
+                    @foreach(var item in Model.FactureHasItems){
+                        <tr>
+                            <th>
+                                @item.Item.Name
+                            </th>
+                            <th>
+                                @item.Item.ProductCountAs
+                            </th>
+                            <th>
+                                @item.Amount
+                            </th>
+                            <th>
+                                @item.Item.PriceNetto zł
+                            </th>
+                            <th>
+                                @item.PriceNetto zł
+                            </th>
+                            <th>
+                                @(@item.Item.VatValue * 100) %
+                            </th>
+                            <th>
+                                @(@item.PriceGross - @item.PriceNetto) zł
+                            </th>
+                            <th>
+                                @item.PriceGross zł
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                           
+                        </th>
+                        <th>
+                            Suma wartości netto
+                        </th>
+                        <th>
+                            Suma wartości VAT
+                        </th>
+                        <th>
+                            Suma wartości brutto
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            Razem:
+                        </th>
+                        <th>
+                            @netto zł
+                        </th>
+                        <th>
+                            @(gross-netto) zł
+                        </th>
+                        <th>
+                            @gross zł
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Razem do zapłaty: <strong>@gross zł</strong></p>
+            <p>Słownie do zapłaty: <strong>@Formatowanie.LiczbaSlownie(bigVal) @Formatowanie.WalutaSlownie(bigVal, "PLN"), @Formatowanie.LiczbaSlownie(lowVal) @Formatowanie.WalutaSlownie(lowVal,".PLN")</strong></p>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-xs-6 text-center">
+                <p>........................................................</p>
+                <p>Podpis nabywcy</p>
+            </div>
+            <div class="col-xs-6 text-center">
+                <p>........................................................</br>
+                <p>Podpis sprzedawcy</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

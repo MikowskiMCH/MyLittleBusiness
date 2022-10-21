@@ -1,0 +1,66 @@
+﻿@model PaginatedList<MyLittleBusiness.Models.Facture>
+
+@{
+    ViewData["Title"] = "Lista faktur klienta";
+    int clientId = (int)ViewData["ClientId"];
+}
+
+<h1>Lista faktur klienta</h1>
+
+<p>
+    <a asp-action="Create" asp-route-id=@clientId>Dodaj nową fakturę</a>
+    <a asp-action="Back" asp-route-id=@clientId>Powrót</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-id=@clientId asp-route-sortOrder="@ViewData["SortDate"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Data</a>
+            </th>
+            <th>
+                Nazwa klienta
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.ClientName)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.FactureId">Szczegóły</a> |
+                <a asp-action="FacturesHasItems" asp-route-id="@item.FactureId">Zarządzaj zawartością</a> |
+                <a asp-action="PrintFacture" asp-route-id="@item.FactureId">Drukuj</a> |
+                <a asp-action="Delete" asp-route-id="@item.FactureId">Usuń</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-id=@clientId
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    @string.Format("<-")
+</a>
+<a asp-action="Index"
+   asp-route-id=@clientId
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    @string.Format("->")
+</a>
