@@ -1,40 +1,82 @@
 ﻿@{
-    ViewData["Title"] = "Wykresy";
-
-    if (SignInManager.IsSignedIn(User))
-    {
-        Layout = "/Views/Shared/_Layout.cshtml";
-    }
-    else
-    {
-        Layout = "~/Areas/Identity/Pages/_AuthLayout.cshtml";
-    }
+    ViewData["Title"] = "Charts";
 
     var data = ViewData["data"] as Dictionary<string, decimal>;
+
+    var data2 = ViewData["data2"] as Dictionary<string, decimal>;
+
+    var data6 = ViewData["data6"] as Dictionary<int, decimal>;
 }
+<div class="container">
+    <div class="row col-md-12 justify-content-around">
+        <div class="d-flex flex-column col-md-4">
+            <div class="card col-md-12 text-center" style="padding: 20px; border-radius: 25px; margin: 20px;">
+                Dzisiejszy utarg(gross): @string.Format("{0}", ViewData["data3"])zł
+            </div>
+            <div class="card col-md-12 text-center col-sm-12" style="padding: 20px; border-radius: 25px; margin: 20px;">
+                Utarg miesięczny(gross): @string.Format("{0}", ViewData["data4"])zł
+            </div>
+            <div class="card col-md-12 text-center col-sm-12" style="padding: 20px; border-radius: 25px; margin: 20px;">
+                Utarg roczny(gross): @string.Format("{0}", ViewData["data5"])zł
+            </div>
+            <div class="card col-md-12 text-center col-sm-12" style="padding: 20px; border-radius: 25px; margin: 20px;">
+                Całkowity utarg(gross): @string.Format("{0}", ViewData["data5"])zł
+            </div>
+        </div>
+        <div class="card col-md-6 text-center col-sm-12" style="padding: 20px; border-radius: 25px; margin: 20px;">
+            Wykres utargu rocznego(gross):
+            <canvas style="height:100%;" id="yearChart"></canvas>
+        </div>
+    </div>
+    <div class="row col-md-12 justify-content-around">
+        <div class="card col-md-5 text-center " style="padding: 20px; border-radius: 25px; margin: 20px;">
+            Najlepsi klienci(Top 5):
+            <canvas style="height: 100%;" id="salesChart"></canvas>
+        </div>
+        <div class="card col-md-5 text-center" style="padding: 20px; border-radius: 25px; margin: 20px;">
+            Sprzedane towary:
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>    
-        const labels = @Html.Raw(Json.Serialize(data.Keys));
-        const datas = @Html.Raw(Json.Serialize(data.Values));
 
-        const data = {
-            labels: labels,
+    <script>
+        const labels1 = @Html.Raw(Json.Serialize(data.Keys));
+        const datas1 = @Html.Raw(Json.Serialize(data.Values));
+
+        const data1 = {
+            labels: labels1,
             datasets: [{
-                label: 'Utarg brutto',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: datas,
-        }]
+                label: 'Wkład brutto',
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(152, 248, 200)',
+                    'rgb(114, 18, 95)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(152, 248, 200, 0.2)',
+                    'rgba(114, 18, 95, 0.2)',
+                ],
+                data: datas1,
+            }]
         };
 
-        const config = {
+        const config1 = {
             type: 'bar',
-            data: data,
+            data: data1,
             options: {
+                responsive: true,
                 scales: {
                     yAxes: {
-                        ticks:{
+                        ticks: {
                             callback: function (value, index, ticks) {
                                 return Chart.Ticks.formatters.numeric.apply(this, [value, index, ticks]) + 'zł';
                             }
@@ -57,17 +99,109 @@
                             }
                         }
                     }
-                }
+                },
             }
         };
     </script>
+
     <script>
-        const myChart = new Chart(
+        const labels2 = @Html.Raw(Json.Serialize(data2.Keys));
+        const datas2 = @Html.Raw(Json.Serialize(data2.Values));
+
+        const data2 = {
+            labels: labels2,
+            datasets: [{
+                label: 'Sold products',
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(152, 248, 200)',
+                    'rgb(114, 18, 95)',
+                ],
+                data: datas2,
+            }]
+        };
+
+        const config2 = {
+            type: 'pie',
+            data: data2,
+        };
+    </script>
+
+    <script>
+        const labels3 = ["January", "February", "March", "April", "May", "Jun", "July", "August", "September", "October", "November", "December"];
+        const datas3 = @Html.Raw(Json.Serialize(data6.Values));
+
+        const data3 = {
+            labels: labels3,
+            datasets: [{
+                label: 'Utarg miesięczny',
+                backgroundColor: [
+                    'rgb(128, 0, 0)',
+                ],
+
+                borderColor: [
+                    'rgba(128, 0, 0, 0.2)',
+                ],
+                tension: 0.2,
+                data: datas3,
+            }]
+        };
+
+        const config3 = {
+            type: 'line',
+            data: data3,
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: {
+                        ticks: {
+                            callback: function (value, index, ticks) {
+                                return Chart.Ticks.formatters.numeric.apply(this, [value, index, ticks]) + 'zł';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+            }
+        };
+    </script>
+
+    <script>
+        const myChart3 = new Chart(
+            document.getElementById('yearChart'),
+            config3
+        );
+    </script>
+
+    <script>
+        const myChart2 = new Chart(
+            document.getElementById('pieChart'),
+            config2
+        );
+    </script>
+
+    <script>
+        const myChart1 = new Chart(
             document.getElementById('salesChart'),
-            config
+            config1
         );
     </script>
 }
-<div class="container">
-    <canvas id="salesChart"></canvas>
-</div>

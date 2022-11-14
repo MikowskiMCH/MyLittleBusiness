@@ -50,7 +50,7 @@ namespace MyLittleBusiness.Controllers
 
             }
 
-            int pageSize = 5;
+            int pageSize = 6;
 
             return View(await PaginatedList<Item>.CreateAsync(items, pageNumber ?? 1, pageSize));
         }
@@ -74,7 +74,7 @@ namespace MyLittleBusiness.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Item item)
         {
-            item.PriceGross = item.PriceNetto + (item.PriceNetto * item.VatValue);
+            item.PriceGross = item.PriceNetto + (item.PriceNetto * (item.VatValue/100));
             _context.Add(item);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -92,7 +92,7 @@ namespace MyLittleBusiness.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Item item)
         {
-            item.PriceGross = item.PriceNetto + (item.PriceNetto * item.VatValue);
+            item.PriceGross = item.PriceNetto + (item.PriceNetto * (item.VatValue/100));
             _context.Update(item);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

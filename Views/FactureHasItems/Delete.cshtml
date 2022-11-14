@@ -4,47 +4,69 @@
     ViewData["Title"] = "Usuń towar z faktury";
 }
 
-<h1>Usuń</h1>
+<style>
+    .card {
+        background-color: mediumseagreen;
+        color: white;
+    }
+</style>
 
-<h3>Czy napewno chcesz usunąć tę pozycję z faktury?</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PriceNetto)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PriceNetto)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PriceGross)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PriceGross)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Facture)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Facture.FactureId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Item)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Item.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="FactureHasItemId" />
-        <input type="submit" value="Usuń" class="btn btn-danger" /> |
-        <a asp-action="Index" asp-route-id=@Model.FactureId>Powrót do listy towarów w fakturze</a>
-    </form>
+<h1 class="text-center m-3 p-3">Usuń</h1>
+
+<h3 class="text-center m-3 p-3">Czy napewno usunąc tę pozycję z faktury?</h3>
+
+<div class="d-flex justify-content-center">
+    <div class="card m-2 col-md-6 p-3 text-center">
+        <div class="card-title">
+            <h3 class="m-2 p-2">Towar:</h3>
+        </div>
+        <hr />
+        <div class="m-2 p-2">
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.Amount)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.Amount)
+                </div>
+            </div>
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.PriceNetto)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.PriceNetto) zł
+                </div>
+            </div>
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.PriceGross)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.PriceGross) zł
+                </div>
+            </div>
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.Facture)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.Facture.FactureId)
+                </div>
+            </div>
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.Item)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.Item.Name)
+                </div>
+            </div>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="ItemId" />
+                <input type="submit" value="Usuń" class="btn btn-danger" />
+                <a class="btn btn-warning text-white text-decoration-none btn-link" asp-action="Index" asp-route-id=@Model.FactureId><div>Powrót</div></a>
+            </form>
+        </div>
+    </div>
 </div>

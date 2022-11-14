@@ -15,36 +15,39 @@ namespace MyLittleBusiness.Models
         [Key]
         public int ItemId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Pole *Nazwa* jest wymagane!")]
         [DisplayName("Nazwa")]
-        [StringLength(50, ErrorMessage ="Pole *Nazwa* Może zawierać maksymalnie 50 znaków")]
+        [StringLength(50, ErrorMessage ="Pole *Nazwa* Może zawierać maksymalnie 50 znaków!")]
         public string Name { get; set; }
 
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Błędnie wpisane dane! (Spróbuj np.: 50.05)")]
+        [Required(ErrorMessage = "Pole *Wartość netto* jest wymagane!")]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Błędnie wpisane dane!(Spróbuj np.: 50.05)")]
         [DisplayName("Wartość netto")]
-        [DisplayFormat(DataFormatString = "{0:0.00zł}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal PriceNetto { get; set; }
 
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Błędnie wpisane dane! (Spróbuj np.: 50.05)")]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Błędnie wpisane dane!(Spróbuj np.: 50.05)")]
         [DisplayName("Wartość brutto")]
-        [DisplayFormat(DataFormatString = "{0:0.00zł}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal PriceGross { get; set; }
 
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Błędnie wpisane dane! (Spróbuj np.: 0.08 dla 8%)")]
+        [Required(ErrorMessage = "Pole *Podatek VAT* jest wymagane!")]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Błędnie wpisane dane!")]
         [DisplayName("Podatek VAT")]
-        [DisplayFormat(DataFormatString = "{0:P2}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         [Column(TypeName = "decimal(4, 2)")]
         public decimal VatValue { get; set; }
 
+        [Required(ErrorMessage = "Pole *Jednostka miary* jest wymagane!")]
         [DisplayName("Jednostka miary")]
         public ProductCountAs ProductCountAs { get; set; }
 
         public virtual ICollection<FactureHasItem> ItemsToFacture { get; set; }
     }
 
-    public class Formatowanie //Zaczerpnięte z http://dev.cdur.pl/Artykuly/Zamiana-kwoty-liczbowej-na-kwote-slowna-w-CSNET
+    public class Formatowanie
     {
         private static string zero = "zero";
         private static string[] jednosci = { "", " jeden ", " dwa ", " trzy ",

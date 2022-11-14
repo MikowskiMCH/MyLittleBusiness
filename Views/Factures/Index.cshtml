@@ -4,21 +4,47 @@
     ViewData["Title"] = "Lista faktur klienta";
     int clientId = (int)ViewData["ClientId"];
 }
+<style>
+    .navigation-left{
+        border: 2px  grey outset;
+        border-right: white;
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
 
-<h1>Lista faktur klienta</h1>
+    .navigation-right {
+        border: 2px grey outset;
+        border-left: dashed 1px grey;
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+    .btn-toolbar-top{
+        border:2px grey solid;
+        border-radius:15px;
+        color: green;
+    }
+</style>
 
-<p>
-    <a asp-action="Create" asp-route-id=@clientId>Dodaj nową fakturę</a>
-    <a asp-action="Back" asp-route-id=@clientId>Powrót</a>
-</p>
-<table class="table">
+<h1 class="text-center">Lista faktur klienta: @ViewData["Name"]</h1>
+
+<div class="row pt-2 pb-2">
+    <div class="btn-toolbar justify-content-between">
+        <div class="btn-group">
+            <a class="page-link btn btn-toolbar-top text-black" asp-action="Back" asp-route-id=@clientId><div>Powrót</div></a>
+        </div>
+        <div class="btn-grou">
+            <a class="page-link btn btn-toolbar-top " asp-action="Create" asp-route-id=@clientId><div>Dodaj nową fakturę</div></a>
+        </div>
+    </div>
+</div>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-id=@clientId asp-route-sortOrder="@ViewData["SortDate"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Data</a>
+                <a asp-action="Index" asp-route-id=@clientId asp-route-sortOrder="@ViewData["SortId"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Nr.</a>
             </th>
             <th>
-                Nazwa klienta
+                Data
             </th>
             <th></th>
         </tr>
@@ -27,16 +53,21 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.FactureId)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Client.ClientName)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.FactureId">Szczegóły</a> |
-                <a asp-action="FacturesHasItems" asp-route-id="@item.FactureId">Zarządzaj zawartością</a> |
-                <a asp-action="PrintFacture" asp-route-id="@item.FactureId">Drukuj</a> |
-                <a asp-action="Delete" asp-route-id="@item.FactureId">Usuń</a>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" asp-action="Details" asp-route-id="@item.FactureId"><div>Szczegóły</div></a>
+                        <a class="dropdown-item" asp-action="FacturesHasItems" asp-route-id="@item.FactureId"><div>Zarządzaj zawartością</div></a>
+                        <a class="dropdown-item" asp-action="PrintFacture" asp-route-id="@item.FactureId"><div>Drukuj</div></a>
+                    </div>
+                </div>
             </td>
         </tr>
 }
@@ -48,19 +79,21 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Index"
-   asp-route-id=@clientId
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    @string.Format("<-")
-</a>
-<a asp-action="Index"
-   asp-route-id=@clientId
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    @string.Format("->")
-</a>
+<div class="btn-toolbar">
+    <div class="btn-group col-2 p-2">
+        <a class="page-link btn btn-default @prevDisabled navigation-left" asp-action="Index"
+           asp-route-id=@clientId
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <div>Wstecz</div>
+        </a>
+        <a class="page-link btn btn-default @nextDisabled navigation-right" asp-action="Index"
+           asp-route-id=@clientId
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <div>Dalej</div>
+        </a>
+    </div>
+</div>

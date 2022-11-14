@@ -16,13 +16,15 @@ namespace MyLittleBusiness.Models
         [MaxLength(50, ErrorMessage = "Pole *Nazwa klienta* może zawierać maksymalnie 50 znaków")]
         public string ClientName { get; set; }
 
+        [Required(ErrorMessage = "Pole *Adres* jest wymagane")]
         [DisplayName("Adres")]
         [MaxLength(100, ErrorMessage = "Pole *Adres* może zawierać maksymalnie 100 znaków")]
         public string Address { get; set; }
 
+        [Required(ErrorMessage = "Pole *Nr. NIP* jest wymagane")]
         [DisplayName("Nr. NIP")]
-        [MaxLength(10, ErrorMessage = "Pole *Nr. NIP* musi zawierać 10 cyfr")]
-        [MinLength(10, ErrorMessage = "Pole *Nr. NIP* musi zawierać 10 cyfr")]
+        [MaxLength(11, ErrorMessage = "Pole *Nr. NIP* musi zawierać 11 cyfr")]
+        [MinLength(11, ErrorMessage = "Pole *Nr. NIP* musi zawierać 11 cyfr")]
         public string NIP { get; set; }
 
         public virtual ICollection<Facture> Factures { get; set; }

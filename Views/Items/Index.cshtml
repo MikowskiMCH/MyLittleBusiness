@@ -3,58 +3,103 @@
 @{
     ViewData["Title"] = "Lista towarów";
 }
+<style>
+    .navigation-left{
+        border: 2px grey outset;
+        border-right: white;
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
 
-<h1>Lista towarów</h1>
+    .navigation-right {
+        border: 2px grey outset;
+        border-left: dashed 1px grey;
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+    .card{
+        border-radius: 15px;
+        margin: 10px;
+        padding: 10px;
+    }
+    .card{
+        background-color:darkmagenta;
+        color:white;
+    }
+    .card:nth-child(2n+1){
+        background-color: darkgoldenrod;
+        color: black;
+    }
+    .card-content{
+        margin: 20px;
+        padding: 20px;
+    }
+    .card-title{
+        font-size: 20px;
+        text-shadow: 2px 2px 5px grey;
+    }
+    .card-btn{
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding-top :20px;
+        padding-bottom :10px;
+    }
+</style>
+<h1 class="text-center">Towary</h1>
 
-<p>
-    <a asp-action="Create">Dodaj nowy towar</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Nazwa</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Wartość brutto</a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PriceGross)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId">Edytuj</a> |
-                <a asp-action="Details" asp-route-id="@item.ItemId">Szczegóły</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId">Usuń</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="d-flex justify-content-center col-12">
+    <div class="row col-12 justify-content-center text-center">
+        <a class="card bg-secondary text-white page-link col-4" asp-action="Index" asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">
+            <div>
+                Sortuj według nazwy
+            </div>
+        </a>
+        <a class="card bg-secondary text-white page-link col-4" asp-action="Index" asp-route-sortOrder="@ViewData["PriceSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">
+            <div>
+                Sortuj według wartości
+            </div>
+        </a>
+        <a class="card bg-primary text-white page-link col-3" asp-action="Create"><div>Dodaj nowy towar</div></a>
+    </div>
+</div>
+
+<div class="row col-md-12 m-1 justify-content-center col-sm-6">
+    @foreach (var item in Model)
+    {
+        <div class="card card-content col-md-3 col-sm-10">
+            <div class="col-12 row card-title">
+                <div class="col-4 text-end">Nazwa:</div><div class="col-8 text-center">@Html.DisplayFor(modelItem => item.Name)</div>
+            </div>
+            <div class="col-12 row">
+                <div class="col-4 text-end">Wartość brutto:</div><div class="col-8 text-center">@Html.DisplayFor(modelItem => item.PriceGross) zł</div>
+            </div>
+            <div class="row text-center card-btn justify-content-around">
+                <a class="page-link text-white bg-primary col-4" asp-action="Edit" asp-route-id="@item.ItemId"><div>Edytuj</div></a>
+                <a class="page-link text-white bg-info col-4" asp-action="Details" asp-route-id="@item.ItemId"><div>Szczegóły</div></a>
+                <a class="page-link text-white bg-danger col-4" asp-action="Delete" asp-route-id="@item.ItemId"><div>Usuń</div></a>
+            </div>
+        </div>
+    }
+</div>
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    @string.Format("<-")
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    @string.Format("->")
-</a>
+
+<div class="btn-toolbar justify-content-center">
+    <div class="btn-group col-4">
+        <a class="page-link navigation-left btn btn-default @prevDisabled" asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@if(Model.HasPreviousPage){@(Model.PageIndex - 1)}"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <div>Wstecz</div>
+        </a>
+        <a class="page-link navigation-right btn btn-default @nextDisabled" asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@if(Model.HasNextPage){@(Model.PageIndex + 1)}"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <div>Dalej</div>
+        </a>
+    </div>
+</div>

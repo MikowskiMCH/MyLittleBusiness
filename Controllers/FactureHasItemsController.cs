@@ -79,20 +79,22 @@ namespace MyLittleBusiness.Controllers
         // GET: FactureHasItems/Create
         public IActionResult Create(int id)
         {
-            ViewBag.FactureId = new SelectList(_context.Factures, "FactureId", "FactureId");
+            ViewBag.RelatedFacture = _context.Factures.Where(f => f.FactureId == id).FirstOrDefault();
             ViewBag.ItemId = new SelectList(_context.Items, "ItemId", "Name");
             var x = new FactureHasItem();
             x.FactureId = id;
+
             return View(x);
         }
 
         // POST: FactureHasItems/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FactureHasItem factureHasItem)
+        public async Task<IActionResult> Create(FactureHasItem factureHasItem, int id)
         {
             factureHasItem.PriceNetto = _context.Items.FirstOrDefault(x => x.ItemId == factureHasItem.ItemId).PriceNetto * factureHasItem.Amount;
             factureHasItem.PriceGross = _context.Items.FirstOrDefault(x => x.ItemId == factureHasItem.ItemId).PriceGross * factureHasItem.Amount;
+            factureHasItem.FactureId = id;
             _context.Add(factureHasItem);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "FactureHasItems", new { @id = factureHasItem.FactureId });

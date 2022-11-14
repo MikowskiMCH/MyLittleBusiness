@@ -3,41 +3,46 @@
 @{
     ViewData["Title"] = "Lista klientów";
 }
+<style>
+    .card {
+        background-color: mediumseagreen;
+    }
+</style>
 
-<h1>Dodaj nowego klienta</h1>
+<h1 class="text-center m-3 p-3">Dodaj klienta</h1>
 
-<h4>Nowy klient</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ClientName" class="control-label"></label>
-                <input asp-for="ClientName" class="form-control" />
-                <span asp-validation-for="ClientName" class="text-danger"></span>
+<div class="d-flex justify-content-center">
+    <div class="card text-white col-md-6 p-3">
+        <h3 class="text-center">Nowy klient:</h3>
+        <hr/>
+        <div class="row">
+            <div>
+                <form class="row justify-content-around" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group col-10">
+                        <label asp-for="ClientName" class="control-label"></label>
+                        <input asp-for="ClientName" class="form-control" />
+                        <span asp-validation-for="ClientName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-10">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-10">
+                        <label asp-for="NIP" class="control-label"></label>
+                        <input asp-for="NIP" class="form-control" />
+                        <span asp-validation-for="NIP" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-center pt-3">
+                        <a class="btn btn-danger text-white text-decoration-none btn-link m-1" asp-action="Index"><div>Powrót</div></a>
+                        <input type="submit" value="Dodaj" class="btn btn-primary m-1" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NIP" class="control-label"></label>
-                <input asp-for="NIP" class="form-control" />
-                <span asp-validation-for="NIP" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Dodaj" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Powrót do listy klientów</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

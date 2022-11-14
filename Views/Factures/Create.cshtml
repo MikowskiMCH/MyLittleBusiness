@@ -3,32 +3,37 @@
     ViewData["Title"] = "Dodaj fakturę";
 }
 
-<h1>Dodaj fakturę</h1>
+<style>
+    .card {
+        background-color: mediumseagreen;
+    }
+</style>
 
-<h4>Nowa Faktura</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
+<h1 class="text-center m-3 p-3">Dodaj fakturę</h1>
+
+<div class="d-flex justify-content-center">
+    <div class="card text-black col-md-6 p-3">
+        <div>
+            <h1 class="text-center">Nowa faktura</h1>
+        </div>
+        <hr />
+        <div class="row">
+            <div>
+                <form class="row justify-content-around" asp-action="Create" asp-route-id=@Model.ClientId>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group col-10">
+                        <label asp-for="Date" class="control-label"></label>
+                        <input asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="d-flex justify-content-center pt-3">
+                        <a class="btn btn-danger text-white text-decoration-none btn-link m-1" asp-action="Index" asp-route-id=@Model.ClientId><div>Powrót</div></a>
+                        <input type="submit" value="Dodaj" class="btn btn-primary m-1" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class ="form-control" asp-items="ViewBag.ClientId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Dodaj" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index" asp-route-id=@Model.ClientId>Powrót do listy faktur</a>
 </div>
 
 @section Scripts {

@@ -3,65 +3,102 @@
     ViewData["Title"] = "Lista klientów";
 }
 
-<h1>Lista klientów</h1>
+<style>
+    .navigation-left{
+        border: 2px grey outset;
+        border-right: white;
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
 
-<p>
-    <a asp-action="Create">Dodaj nowego klienta</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Nazwa klienta</a>
-            </th>
-            <th>
-                Adres
-            </th>
-            <th>
-                Nip
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
+    .navigation-right {
+        border: 2px grey outset;
+        border-left: dashed 1px grey;
+        border-bottom-right-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+    .btn-add{
+        color: green;
+        border: 2px grey solid;
+        border-radius: 15px;
+    }
+</style>
+
+<h1 class="d-flex justify-content-center">Klienci</h1>
+
+<div class="btn-toolbar d-flex justify-content-end">
+    <div class="btn-group">
+        <a class="page-link btn text-decoration-none btn-add text-center" asp-action="Create"><div>Dodaj klienta</div></a>
+    </div>
+</div>
+
+<!-- Header of table -->
+
+<div class="col-12 card" style="border-radius: 20px; margin-left: 3px; margin-top: 10px; border: 2px solid black;">
+    <div class="row col-12 card-body text-center">
+        <div class="col-3" style="border-right: 1px dashed grey;">
+            <div><a asp-action="Index" asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentSort"]">Nazwa klienta</a></div>
+        </div>
+        <div class="col-5" style="border-right: 1px dashed grey;">
+            Adress
+        </div>
+        <div class="col-3" style="border-right: 1px dashed grey;">
+            NIP
+        </div>
+        <div class="col-1">
+        </div>
+    </div>
+</div>
+
+<!-- Body of table -->
+
+@foreach (var item in Model)
+{
+<div class="col-12 card" style="border-radius: 15px; margin: 3px;">
+    <div class="row col-12 card-body text-center">
+        <div class="col-3" style="border-right: 1px dashed grey;">
+            @Html.DisplayFor(modelItem => item.ClientName)
+        </div>
+        <div class="col-5" style="border-right: 1px dashed grey;">
+            @Html.DisplayFor(modelItem => item.Address)
+        </div>
+        <div class="col-3" style="border-right: 1px dashed grey;">
                 @Html.DisplayFor(modelItem => item.NIP)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ClientId">Edytuj</a> |
-                <a asp-action="Details" asp-route-id="@item.ClientId">Szczegóły</a> |
-                <a asp-action="Factures" asp-route-id="@item.ClientId">Faktury</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClientId">Usuń</a> 
-            </td>
-        </tr>
+        </div>
+        <div class="col-1">
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.ClientId">Edytuj</a>
+                    <a class="dropdown-item" asp-action="Details" asp-route-id="@item.ClientId">Szczegóły</a>
+                    <a class="dropdown-item" asp-action="Factures" asp-route-id="@item.ClientId">Faktury</a>
+                    <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.ClientId">Usuń</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 }
-    </tbody>
-</table>
 
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @prevDisabled">
-    @string.Format("<-")
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    @string.Format("->")
-</a>
+<div class="btn-toolbar">
+    <div class="btn-group col-2 p-2">
+        <a class="page-link btn btn-default @prevDisabled navigation-left" asp-action="Index"
+        asp-route-sortOrder="@ViewData["CurrentSort"]"
+        asp-route-pageNumber="@if(Model.HasPreviousPage){@(Model.PageIndex - 1)}"
+        asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <div>Wstecz</div>
+        </a>
+        <a class="btn btn-default page-link @nextDisabled navigation-right" asp-action="Index"
+        asp-route-sortOrder="@ViewData["CurrentSort"]"
+        asp-route-pageNumber="@if(Model.HasNextPage){@(Model.PageIndex + 1)}"
+        asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <div>Dalej</div>
+        </a>
+    </div>
+</div>

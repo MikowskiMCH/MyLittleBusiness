@@ -3,15 +3,35 @@
 @{
     ViewData["Title"] = "Szczegóły faktury";
 }
+<style>
+    .btn-back{
+        border:solid grey 2px;
+        border-radius:15px;
+    }
+    .card{
+        border: 1px solid grey;
+        border-radius: 15px;
+        background-color: mediumseagreen;
+    }
+    .table{
+        border-bottom:black solid 1px;
+    }
+</style>
 
-<h1>Szczegóły</h1>
+<div class="row d-flex justify-content-start">
+    <div class="btn-group col-1">
+        <a class="page-link btn btn-back text-black" asp-action="Index" asp-route-id="@Model?.ClientId">Powrót</a>
+    </div>
+</div>
 
-<div>
-    <h4>Faktura @Model.FactureId</h4>
+<h1 class="text-center">Szczegóły</h1>
+
+<div class="card p-2">
+    <h2 class="p-2 text-center">Faktura @Model.FactureId</h2>
     <hr />
-    <h3>Całkościowa wartośc netto towaru: @ViewData["sumNetto"] zł</h3>
-    <h3>całościowa wartość brutto towaru: @ViewData["sumBrutto"] zł</h3>
-    <dl class="row">
+    <h3 class="p-2">Całkościowa wartośc netto towaru: @ViewData["sumNetto"] zł</h3>
+    <h3 class="p-2">Całościowa wartość brutto towaru: @ViewData["sumBrutto"] zł</h3>
+    <dl class="row p-2 m-2">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Date)
         </dt>
@@ -26,7 +46,7 @@
         </dd>
     </dl>
     <hr />
-    <h3>Zawiera towary:</h3>
+    <h3 class="p-3">Zawiera towary:</h3>
     <table class="table">
         <thead>
             <tr>
@@ -44,8 +64,4 @@
             </tr>
         }
     </table>
-    
-</div>
-<div>
-    <a asp-action="Index" asp-route-id="@Model?.ClientId">Powrót do listy faktur</a>
 </div>

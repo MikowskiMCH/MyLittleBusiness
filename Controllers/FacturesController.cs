@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MyLittleBusiness.Models;
 using Rotativa.AspNetCore;
@@ -18,8 +19,9 @@ namespace MyLittleBusiness.Controllers
         // GET: Factures
         public async Task<ActionResult> Index(int id, string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            ViewData["Name"] = _context.Clients.Where(f => f.ClientId == id).Select(f => f.ClientName).AsQueryable().FirstOrDefault();
             ViewData["ClientId"] = id;
-            ViewData["SortDate"] = String.IsNullOrEmpty(sortOrder) ? "Date" : "";
+            ViewData["SortId"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["CurrentSort"] = sortOrder;
 
             var factures = _context.Factures.Where(f => f.ClientId == id).Include(f=>f.Client).AsQueryable();
@@ -35,12 +37,12 @@ namespace MyLittleBusiness.Controllers
 
             switch (sortOrder)
             {
-                case ("Date"):
-                    factures = factures.OrderByDescending(f => f.Date).AsQueryable();
+                case ("id_desc"):
+                    factures = factures.OrderByDescending(f => f.FactureId).AsQueryable();
                     break;
 
                 default:
-                    factures = factures.OrderBy(f => f.Date).AsQueryable();
+                    factures = factures.OrderBy(f => f.FactureId).AsQueryable();
                     break;
             }
 
@@ -79,8 +81,9 @@ namespace MyLittleBusiness.Controllers
         // POST: Factures/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Facture facture)
+        public async Task<ActionResult> Create(Facture facture, int id)
         {
+            facture.ClientId = id;
             _context.Add(facture);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Factures", new { @id = facture.ClientId });
@@ -122,7 +125,7 @@ namespace MyLittleBusiness.Controllers
 
         public IActionResult PrintFacture(int id)
         {
-            Facture facture = (Facture)_context.Factures.Include(f => f.Client).Include(f => f.FactureHasItems).ThenInclude(f => f.Item).Where(f => f.FactureId == id).First();
+            Facture facture = (Facture)_context.Factures.Include(f => f.Client).Include(f => f.FactureHasItems).ThenInclude(f => f.Item).Where(f => f.FactureId == id).FirstOrDefault();
             return new ViewAsPdf(facture)
             {
                 FileName = String.Format("Faktura-{0}.pdf", id),

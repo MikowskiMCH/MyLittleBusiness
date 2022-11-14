@@ -23,6 +23,14 @@ a {
   border-color: #1861ac;
 }
 
+.background-body {
+    background: linear-gradient(90deg, rgba(186,186,186,1) 5%, rgba(230,229,229,1) 29%, rgba(231,230,230,1) 37%, rgba(255,255,255,1) 64%);
+}
+
+.background-footer-header-gradient {
+    background: radial-gradient(circle, rgba(48,96,57,1) 28%, rgba(104,116,68,1) 100%);
+}
+
 .border-top {
   border-top: 1px solid #e5e5e5;
 }

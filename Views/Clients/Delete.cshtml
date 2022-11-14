@@ -3,37 +3,53 @@
 @{
     ViewData["Title"] = "Usuń klienta";
 }
+<style>
+    .card {
+        background-color: mediumseagreen;
+        color: white;
+    }
+</style>
 
-<h1>Usuń</h1>
+<h1 class="text-center m-3 p-3">Usuń</h1>
 
-<h3>Czy na pewno usunąć tę pozycję z listy klientów?</h3>
-<div>
-    <h4>Klient @Model.ClientId</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ClientName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ClientName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NIP)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NIP)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ClientId" />
-        <input type="submit" value="Usuń" class="btn btn-danger" /> |
-        <a asp-action="Index">Powrót do listy klientów</a>
-    </form>
+<h3 class="text-center m-3 p-3">Czy napewno usunąc tę pozycję z listy klientów?</h3>
+
+<div class="d-flex justify-content-center">
+    <div class="card m-2 col-md-6 p-3 text-center">
+        <div class="card-title">
+            <h3 class="m-2 p-2">Klient nr. @Model.ClientId</h3>
+        </div>
+        <hr />
+        <div class="m-2 p-2">
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.ClientName)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.ClientName)
+                </div>
+            </div>
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.Address)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.Address)
+                </div>
+            </div>
+            <div class="row p-1 m-1">
+                <div class="col-6">
+                    @Html.DisplayNameFor(model => model.NIP)
+                </div>
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.NIP)
+                </div>
+            </div>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="ClientId" />
+                <input type="submit" value="Usuń" class="btn btn-danger" />
+                <a class="btn btn-warning text-white text-decoration-none btn-link" asp-action="Index"><div>Powrót</div></a>
+            </form>
+        </div>
+    </div>
 </div>
